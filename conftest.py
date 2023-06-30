@@ -10,7 +10,12 @@ def pytest_addoption(parser):
     parser.addoption("--browser", default="chrome", help="Browser. Default option is chrome")
     parser.addoption("--drivers_folder", default="D:\\drivers\\", help="Path to the drivers")
     parser.addoption("--headless", action="store_true", help="headless режим. только в False(по умолчанию) или True")
-    parser.addoption("--url", default="http://192.168.0.114:8081/", help="Opencart main page")
+    parser.addoption("--url", help="URL")
+
+
+@pytest.fixture
+def get_url(request):
+    return request.config.getoption("--url")
 
 
 @pytest.fixture()
