@@ -1,60 +1,52 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
+from models.admin import username, passwod
+from pages_and_components.components.header_component import HeaderComponent
+from pages_and_components.pages.admin.admin_login_page import AdminLoginPage
+from pages_and_components.pages.catalog_page import CatalogPage
+from pages_and_components.pages.product_page import ProductPage
+from pages_and_components.pages.registration_page import RegistrationPage
+from pages_and_components.pages.main_page import MainPage
+from pages_and_components.components.catalog_menu_component import CatalogMenuComponent
 
 
 def test1_main_page(browser):
-    wait = WebDriverWait(browser, 10, poll_frequency=1)
-    assert wait.until(EC.title_is("Your Store"))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Featured']")))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@class='carousel swiper-viewport']")))
-    assert wait.until(EC.visibility_of_element_located((By.ID, "content")))
-    assert wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".nav.navbar-nav")))   # class="nav navbar-nav"
+    "Проверяем контент на мейн пейдже"
+    main_page = MainPage(browser)
+    assert main_page.check_content_visible()
 
 
-def test2_catalog_page(browser):
-    wait = WebDriverWait(browser, 10, poll_frequency=1)
-    wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='MP3 Players']"))).click()
-    wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Show All MP3 Players']"))).click()
-    assert wait.until(EC.title_is("MP3 Players"))
-    category = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@class='list-group-item active']"))).text
-    assert "MP3 Players" in category   # проверяем, что в названии категории слева есть MP3 Players
-    assert wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".product-thumb")))
-    assert wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".price")))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Add to Cart']")))
+def test2_catalog_page_mp3_players(browser):
+    "В синем меню сверху выбираем MP3 Players и открываем каталог с плеерами"
+    catalog_menu = CatalogMenuComponent(browser)
+    catalog_menu.click_mp3_players()
+    catalog_menu.show_all_mp3_players()
+    catalog_page = CatalogPage(browser)
+    catalog_page.check_content_visible()
+    catalog_page.wait_title("MP3 Players")
+    assert catalog_page.check_selected_category("MP3 Players")
+    catalog_page.wait_title("MP3 Players")
 
 
 def test3_product_page(browser):
-    wait = WebDriverWait(browser, 10, poll_frequency=1)
-    browser.get("http://192.168.0.114:8081/camera/canon-eos-5d")
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@class='list-unstyled']//*[contains(text(),"
-                                                                  " 'Availability:')]")))  # есть доступность
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@class='list-unstyled']//*[contains(text(),"
-                                                                  " 'Product Code:')]")))  # есть код продукта
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@class='list-unstyled']//*[contains(text(),"
-                                                                  " 'Brand:')]")))  # есть изготовитель
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Add to Cart']")))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[text()='Description']")))
+    "Открываем страницу первого мп3 плеера из каталога и проверяем контент"
+    catalog_menu = CatalogMenuComponent(browser)
+    catalog_menu.click_mp3_players()
+    catalog_menu.show_all_mp3_players()
+    catalog_page = CatalogPage(browser)
+    catalog_page.click_first_product()
+    product_page = ProductPage(browser)
+    assert product_page.check_content_visible()
 
 
-def test4_admin_page(browser):
-    browser.get("http://192.168.0.114:8081/admin/")
-    wait = WebDriverWait(browser, 10, poll_frequency=1)
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@name='username']")))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@name='password']")))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@class='help-block']")))
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".btn-primary"))).click()
-    assert wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".alert-danger")))
-    wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@class='help-block']/a"))).click()
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@name='email']")))
+def test4_admin_page(browser, base_url):
+    "Проверяем неуспешный логин"
+    browser.get(f"{base_url}/admin")
+    admin_login = AdminLoginPage(browser)
+    assert admin_login.failed_login(username, passwod)
 
 
 def test5_register_page(browser):
-    browser.get("http://192.168.0.114:8081/index.php?route=account/register")
-    wait = WebDriverWait(browser, 10, poll_frequency=1)
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@name='firstname']")))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@name='lastname']")))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@name='email']")))
-    assert wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@type='checkbox'  and @value='1']")))  # чекбокс
-    wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@type='submit']"))).click()
-    assert wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".alert-danger")))
+    "Проверяем поле имя, фамилия, емейл, телефон, чекбокс на странице реги"
+    header = HeaderComponent(browser)
+    header.click_on_my_account_registration()
+    register = RegistrationPage(browser)
+    assert register.check_fields()
