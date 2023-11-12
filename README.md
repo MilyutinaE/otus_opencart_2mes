@@ -17,5 +17,5 @@ pytest --browser=edge --url="https://ya.ru/"
 в opera браузере в headlessflake
 pytest --browser=opera --headless
 
---url="http://localhost:8081/"  (еще можно подставить айпи адрес вместо localhost)
+--url="http://localhost:80"  (еще можно подставить айпи адрес вместо localhost)
 

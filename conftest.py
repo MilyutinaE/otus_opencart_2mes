@@ -30,9 +30,7 @@ def browser(request):
         options = webdriver.ChromeOptions()
         if headless:
             options.add_argument('--headless=new')
-
-        service = ChromeService(executable_path=os.path.join(drivers_folder, "chromedriver"))
-        driver = webdriver.Chrome(service=service, options=options)
+        driver = webdriver.Chrome()
 
     elif browser_name == "firefox":
         options = webdriver.FirefoxOptions()
