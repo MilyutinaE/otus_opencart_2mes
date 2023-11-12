@@ -11,7 +11,7 @@ from pages_and_components.pages.my_account_page import MyAccountPage
 from models.fake_user import fake_first_name, fake_last_name, fake_email, fake_phone, fake_password
 
 
-def test_registration_new_user(browser):
+def test_register_new_user(browser):
     "Регаемся и проверяем линки и кнопку логаута на странице аккаунта"
     header = HeaderComponent(browser)
     header.click_on_my_account_registration()
@@ -29,9 +29,9 @@ def test_change_currency(browser):
     assert currency.change_random_currency()
 
 
-def test_add_mew_product(browser, get_url):
+def test_add_mew_product(browser, base_url):
     "Успешно и неуспешно добавляем новый продукт в админке"
-    browser.get(f"{get_url}/admin")
+    browser.get(f"{base_url}/admin")
     admin_login = AdminLoginPage(browser)
     admin_login.login(username, passwod)
     admin_left_menu = AdminLeftMenu(browser)
@@ -46,9 +46,9 @@ def test_add_mew_product(browser, get_url):
     assert add_product.add_new_product_fail(name_product, meta_tag)
 
 
-def test_delete_product(browser, get_url):
+def test_delete_product(browser, base_url):
     "Удаляем продукт в админке"
-    browser.get(f"{get_url}/admin")
+    browser.get(f"{base_url}/admin")
     admin_login = AdminLoginPage(browser)
     admin_login.login(username, passwod)
     admin_left_menu = AdminLeftMenu(browser)

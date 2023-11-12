@@ -37,9 +37,9 @@ def test3_product_page(browser):
     assert product_page.check_content_visible()
 
 
-def test4_admin_page(browser, get_url):
+def test4_admin_page(browser, base_url):
     "Проверяем неуспешный логин"
-    browser.get(f"{get_url}/admin")
+    browser.get(f"{base_url}/admin")
     admin_login = AdminLoginPage(browser)
     assert admin_login.failed_login(username, passwod)
 

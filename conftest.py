@@ -14,7 +14,7 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture
-def get_url(request):
+def base_url(request):
     return request.config.getoption("--url")
 
 
