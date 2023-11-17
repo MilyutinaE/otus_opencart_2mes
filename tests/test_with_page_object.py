@@ -54,6 +54,6 @@ def test_delete_product(browser, base_url):
     admin_left_menu = AdminLeftMenu(browser)
     admin_left_menu.select_products()
     admin_products_page = AdminProductsPage(browser)
-    admin_products_page.select_imac()
+    admin_products_page.select_iphone()
     admin_products_page.click_delete()
-    assert admin_products_page.check_product_title(name="iMac") is False
+    assert admin_products_page.check_product_title(name="iPhone") is False

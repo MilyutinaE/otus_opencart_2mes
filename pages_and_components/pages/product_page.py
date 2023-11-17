@@ -11,6 +11,7 @@ class ProductPage(BasePage):
         self.BRAND = (By.XPATH, "//*[@class='list-unstyled']//*[contains(text(), 'Brand:')]")
         self.ADD_TO_CART = (By.XPATH, "//*[text()='Add to Cart']")
         self.DESCRIPTION = (By.XPATH, "//*[text()='Description']")
+        self.logger = browser.logger
 
     def check_content_visible(self):
         try:

@@ -11,6 +11,7 @@ class CatalogPage(BasePage):
         self.ADD_TO_CARD_BUTTONS = (By.XPATH, "//*[text()='Add to Cart']")
         self.SELECTED_CATEGORY = (By.XPATH, "//*[@class='list-group-item active']")
         self.PRODUCTS_NAMES = (By.XPATH, "//h4/a")
+        self.logger = browser.logger
 
     def check_content_visible(self):
         try:
@@ -32,4 +33,5 @@ class CatalogPage(BasePage):
         self.wait_title_change(title)
 
     def click_first_product(self):
+        self.logger.info("Click first product")
         self.get_element_by_locator(self.PRODUCTS_NAMES).click()

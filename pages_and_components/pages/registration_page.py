@@ -18,19 +18,28 @@ class RegistrationPage(BasePage):
         self.TITLE = "Register Account"
         self.TITLE_SUCCESSFUL = "Your Account Has Been Created!"
         self.check_registration_page()
+        self.logger = browser.logger
 
     def registration_new_user(self, firstname, lastname, email, telephone, password):
         self.click(self.INPUT_FIRSTNAME)
+        self.logger.info("Send keys firstname")
         self.send_keys(self.INPUT_FIRSTNAME, firstname)
         self.click(self.INPUT_LASTNAME)
+        self.logger.info("Send keys lastname")
         self.send_keys(self.INPUT_LASTNAME, lastname)
         self.click(self.INPUT_EMAIL)
+        self.logger.info("Send keys email")
         self.send_keys(self.INPUT_EMAIL, email)
         "Второй вариант написания кода send_keys через точку"
+        self.logger.info("Send keys telephone")
         self.get_element_by_locator(self.INPUT_TELEPHONE).send_keys(telephone)
+        self.logger.info("Send keys password")
         self.get_element_by_locator(self.INPUT_PASSWORD).send_keys(password)
+        self.logger.info("Send keys confirm password")
         self.get_element_by_locator(self.INPUT_PASSWORD_CONFIRM).send_keys(password)
+        self.logger.info("Click Privacy Policy")
         self.get_element_by_locator(self.PRIVACY_POLICY).click()
+        self.logger.info("Click Continue Button")
         self.get_element_by_locator(self.CONTINUE_BUTTON).click()
         self.check_registration_sucsessful()
         self.get_element_by_locator(self.CONTINUE_SECOND_BUTTON).click()

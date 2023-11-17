@@ -12,6 +12,7 @@ class MainPage(BasePage):
         self.COMPANY_CAROUSEL = (By.XPATH, "//*[@class='carousel swiper-viewport']")
         self.CONTENT = (By.ID, "content")
         self.NAVIGATION_BAR = (By.CSS_SELECTOR, ".nav.navbar-nav")   # class="nav navbar-nav"
+        self.logger = browser.logger
 
     def check_content_visible(self):
         try:

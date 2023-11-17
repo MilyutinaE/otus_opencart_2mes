@@ -7,6 +7,7 @@ from selenium.webdriver.common.keys import Keys
 class BasePage:
     def __init__(self, driver):
         self.driver = driver
+        self.logger = driver.logger
 
     def is_element_visible(self, locator: tuple):
         try:
@@ -22,6 +23,7 @@ class BasePage:
             raise AssertionError("Cant find elements by locator: {}".format(locator))
 
     def clear_input(self, input):
+        self.logger.info("Clear input")
         input.send_keys(Keys.SHIFT, Keys.ARROW_UP)
         input.send_keys(Keys.BACK_SPACE)
 
