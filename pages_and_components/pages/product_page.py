@@ -1,6 +1,7 @@
 from pages_and_components.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+import allure
 
 
 class ProductPage(BasePage):
@@ -13,6 +14,7 @@ class ProductPage(BasePage):
         self.DESCRIPTION = (By.XPATH, "//*[text()='Description']")
         self.logger = browser.logger
 
+    @allure.step("Check content on product page")
     def check_content_visible(self):
         try:
             self.is_element_visible(self.AVAILABILITY)

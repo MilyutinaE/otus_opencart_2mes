@@ -1,6 +1,7 @@
 from pages_and_components.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+import allure
 
 
 class RegistrationPage(BasePage):
@@ -20,6 +21,7 @@ class RegistrationPage(BasePage):
         self.check_registration_page()
         self.logger = browser.logger
 
+    @allure.step("Registration new user")
     def registration_new_user(self, firstname, lastname, email, telephone, password):
         self.click(self.INPUT_FIRSTNAME)
         self.logger.info("Send keys firstname")
@@ -41,12 +43,13 @@ class RegistrationPage(BasePage):
         self.get_element_by_locator(self.PRIVACY_POLICY).click()
         self.logger.info("Click Continue Button")
         self.get_element_by_locator(self.CONTINUE_BUTTON).click()
-        self.check_registration_sucsessful()
+        self.check_registration_successful()
         self.get_element_by_locator(self.CONTINUE_SECOND_BUTTON).click()
 
     def check_registration_page(self):
         assert self.wait_title_change(self.TITLE)
 
+    @allure.step("Check content on registration page")
     def check_fields(self):
         try:
             self.get_element_by_locator(self.INPUT_FIRSTNAME)
@@ -58,5 +61,6 @@ class RegistrationPage(BasePage):
         except TimeoutException:
             return False
 
-    def check_registration_sucsessful(self):
+    @allure.step("Check registration successful")
+    def check_registration_successful(self):
         self.wait_title_change(self.TITLE_SUCCESSFUL)

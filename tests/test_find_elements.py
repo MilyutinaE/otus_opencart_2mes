@@ -1,3 +1,4 @@
+import allure
 from models.admin import username, passwod
 from pages_and_components.components.header_component import HeaderComponent
 from pages_and_components.pages.admin.admin_login_page import AdminLoginPage
@@ -8,12 +9,14 @@ from pages_and_components.pages.main_page import MainPage
 from pages_and_components.components.catalog_menu_component import CatalogMenuComponent
 
 
+@allure.severity(allure.severity_level.NORMAL)
 def test1_main_page(browser):
     "Проверяем контент на мейн пейдже"
     main_page = MainPage(browser)
     assert main_page.check_content_visible()
 
 
+@allure.severity(allure.severity_level.NORMAL)
 def test2_catalog_page_mp3_players(browser):
     "В синем меню сверху выбираем MP3 Players и открываем каталог с плеерами"
     catalog_menu = CatalogMenuComponent(browser)
@@ -26,6 +29,7 @@ def test2_catalog_page_mp3_players(browser):
     catalog_page.wait_title("MP3 Players")
 
 
+@allure.severity(allure.severity_level.NORMAL)
 def test3_product_page(browser):
     "Открываем страницу первого мп3 плеера из каталога и проверяем контент"
     catalog_menu = CatalogMenuComponent(browser)
@@ -37,6 +41,7 @@ def test3_product_page(browser):
     assert product_page.check_content_visible()
 
 
+@allure.severity(allure.severity_level.CRITICAL)
 def test4_admin_page(browser, base_url):
     "Проверяем неуспешный логин"
     browser.get(f"{base_url}/admin")
@@ -44,6 +49,7 @@ def test4_admin_page(browser, base_url):
     assert admin_login.failed_login(username, passwod)
 
 
+@allure.severity(allure.severity_level.NORMAL)
 def test5_register_page(browser):
     "Проверяем поле имя, фамилия, емейл, телефон, чекбокс на странице реги"
     header = HeaderComponent(browser)

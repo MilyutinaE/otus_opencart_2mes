@@ -1,5 +1,6 @@
 from pages_and_components.base_page import BasePage
 from selenium.webdriver.common.by import By
+import allure
 
 
 class AdminLoginPage(BasePage):
@@ -12,6 +13,7 @@ class AdminLoginPage(BasePage):
         self.ALERT = (By.CSS_SELECTOR, ".alert-danger")
         self.logger = browser.logger
 
+    @allure.step("Login")
     def login(self, username, password):
         self.click(self.USERNAME)
         self.logger.info("Send keys username")
@@ -22,6 +24,7 @@ class AdminLoginPage(BasePage):
         self.logger.info("Click login button")
         self.click(self.LOGIN_BUTTON)
 
+    @allure.step("Failed Login")
     def failed_login(self, username, password):
         self.click(self.USERNAME)
         self.logger.info("Send keys wrong username")

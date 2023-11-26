@@ -1,6 +1,7 @@
 from pages_and_components.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+import allure
 
 
 class MainPage(BasePage):
@@ -12,8 +13,8 @@ class MainPage(BasePage):
         self.COMPANY_CAROUSEL = (By.XPATH, "//*[@class='carousel swiper-viewport']")
         self.CONTENT = (By.ID, "content")
         self.NAVIGATION_BAR = (By.CSS_SELECTOR, ".nav.navbar-nav")   # class="nav navbar-nav"
-        self.logger = browser.logger
 
+    @allure.step("Check content on main page")
     def check_content_visible(self):
         try:
             self.is_element_visible(self.FEATURED)

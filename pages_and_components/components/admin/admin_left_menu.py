@@ -1,5 +1,6 @@
 from pages_and_components.base_page import BasePage
 from selenium.webdriver.common.by import By
+import allure
 
 
 class AdminLeftMenu(BasePage):
@@ -9,6 +10,7 @@ class AdminLeftMenu(BasePage):
         self.PRODUCTS = (By.XPATH, "//a[text()='Products']")
         self.logger = browser.logger
 
+    @allure.step("Select products")
     def select_products(self):
         self.logger.info("Click CATALOG in left menu")
         self.click(self.CATALOG)

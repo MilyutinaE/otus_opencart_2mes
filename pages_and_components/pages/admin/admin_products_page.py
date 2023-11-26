@@ -1,5 +1,6 @@
 from pages_and_components.base_page import BasePage
 from selenium.webdriver.common.by import By
+import allure
 
 
 class AdminProductsPage(BasePage):
@@ -13,23 +14,24 @@ class AdminProductsPage(BasePage):
                                           "[@type='checkbox']")
         self.logger = browser.logger
 
+    @allure.step("Check Produck Title")
     def click_add_new(self):
-        self.logger.info("Click add new product")
         self.click(self.ADD_NEW)
 
+    @allure.step("Check Produck Title")
     def check_product_title(self, name):
         result = self.is_element_visible((By.XPATH, f"//*[text()='{name}']"))
         return result
 
+    @allure.step("Click edit iPhone")
     def click_edit_iphone(self):
-        self.logger.info("Click edit iPhone")
         self.click(self.IPHONE_EDIT_BUTTON)
 
+    @allure.step("Select iPhone")
     def select_iphone(self):
-        self.logger.info("Select iPhone")
         self.click(self.IPHONE_CHECKBOX)
 
+    @allure.step("Delete iPhone")
     def click_delete(self):
-        self.logger.info("Delete iPhone")
         self.click(self.DELETE)
         self.accept_alert()
