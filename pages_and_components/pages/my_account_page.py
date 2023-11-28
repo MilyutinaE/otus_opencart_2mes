@@ -12,6 +12,7 @@ class MyAccountPage(BasePage):
         self.YOUR_TRANSACTIONS_LINK = (By.XPATH, '//a[text()="Your Transactions"]')
         self.LOGOUT_BUTTON_RIGHT_MENU = (By.XPATH, '//*[@class="list-group"]//*[text()="Logout"]')
         self.check_my_account_page()
+        self.logger = browser.logger
 
     def check_my_account_page(self):
         self.wait_title_change(self.TITLE)

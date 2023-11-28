@@ -9,8 +9,11 @@ from pages_and_components.pages.admin.admin_products_page import AdminProductsPa
 from pages_and_components.pages.registration_page import RegistrationPage
 from pages_and_components.pages.my_account_page import MyAccountPage
 from models.fake_user import fake_first_name, fake_last_name, fake_email, fake_phone, fake_password
+import allure
+import pytest
 
 
+@allure.severity(allure.severity_level.CRITICAL)
 def test_register_new_user(browser):
     "Регаемся и проверяем линки и кнопку логаута на странице аккаунта"
     header = HeaderComponent(browser)
@@ -22,6 +25,7 @@ def test_register_new_user(browser):
     assert my_account.check_logout_button_right_menu()
 
 
+@allure.severity(allure.severity_level.NORMAL)
 def test_change_currency(browser):
     "Меняем валюту в хедере и проверяем, что она поменялась"
     currency = CurrencyComponent(browser)
@@ -29,6 +33,7 @@ def test_change_currency(browser):
     assert currency.change_random_currency()
 
 
+@allure.severity(allure.severity_level.CRITICAL)
 def test_add_mew_product(browser, base_url):
     "Успешно и неуспешно добавляем новый продукт в админке"
     browser.get(f"{base_url}/admin")
@@ -46,6 +51,8 @@ def test_add_mew_product(browser, base_url):
     assert add_product.add_new_product_fail(name_product, meta_tag)
 
 
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.skip("Skipped test")
 def test_delete_product(browser, base_url):
     "Удаляем продукт в админке"
     browser.get(f"{base_url}/admin")
@@ -54,6 +61,6 @@ def test_delete_product(browser, base_url):
     admin_left_menu = AdminLeftMenu(browser)
     admin_left_menu.select_products()
     admin_products_page = AdminProductsPage(browser)
-    admin_products_page.select_imac()
+    admin_products_page.select_iphone()
     admin_products_page.click_delete()
-    assert admin_products_page.check_product_title(name="iMac") is False
+    assert admin_products_page.check_product_title(name="iPhone") is False

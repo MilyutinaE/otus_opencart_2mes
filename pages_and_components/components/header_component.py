@@ -1,5 +1,6 @@
 from pages_and_components.base_page import BasePage
 from selenium.webdriver.common.by import By
+import allure
 
 
 class HeaderComponent(BasePage):
@@ -8,7 +9,9 @@ class HeaderComponent(BasePage):
         self.MY_ACCOUNT_BUTTON = (By.XPATH, '//span[text()="My Account"]')
         self.REGISTER_IN_MY_ACCOUNT_DROPDOWN = (By.XPATH, '//*[@class="dropdown-menu dropdown-menu-right"]'
                                                           '//*[text()="Register"]')
+        self.logger = browser.logger
 
+    @allure.step("Click MY_ACCOUNT_BUTTON")
     def click_on_my_account_registration(self):
         el = self.get_element_by_locator(self.MY_ACCOUNT_BUTTON)
         el.click()

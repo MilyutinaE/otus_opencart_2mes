@@ -19,3 +19,10 @@ pytest --browser=opera --headless
 
 --url="http://localhost:80"  (еще можно подставить айпи адрес вместо localhost)
 
+запуск
+pytest --url="http://localhost:80" --log_level=DEBUG
+pytest tests/test_with_page_object.py --url="http://localhost:80" --log_level=DEBUG 
+pytest tests/test_find_elements.py --url="http://localhost:80" --log_level=INFO    
+запустили тесты, потом аллюр
+D:\programsfortests\allure\allure-2.24.1\bin\allure.bat generate allure-results\ --clean
+потом в аллюр-репорт открыть индекс.хтмл и открыть в хроме
