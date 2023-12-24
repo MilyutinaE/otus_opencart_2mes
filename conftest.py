@@ -1,38 +1,30 @@
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from selenium.webdriver.edge.service import Service as EdgeService
-import os.path
 import logging
 import datetime
 from selenium.webdriver.chrome.options import Options
+import paramiko
 
 
 def pytest_addoption(parser):
     parser.addoption("--browser", default="chrome", help="Browser. Default option is chrome")
-    parser.addoption("--drivers_folder", default="D:\\drivers\\", help="Path to the drivers")
     parser.addoption("--headless", action="store_true", help="headless режим. только в False(по умолчанию) или True")
     parser.addoption("--url", help="URL")
     parser.addoption("--log_level", action="store", default="INFO")
     parser.addoption("--remote", default=False)
     parser.addoption("--executor", default="localhost")
-
-
-@pytest.fixture
-def base_url(request):
-    executor = request.config.getoption("--executor")
-    url = f"http://{executor}"
-    return url
+    parser.addoption("--user", help="username for remote virtual machine")
+    parser.addoption("--password", help="password for remote virtual machine")
 
 
 @pytest.fixture()
 def browser(request):
     browser = request.config.getoption("--browser")
-    drivers_folder = request.config.getoption("--drivers_folder")
     headless = request.config.getoption("--headless")
     remote = request.config.getoption("--remote")
     executor = request.config.getoption("--executor")
+    user = request.config.getoption("--user")  # only for remote start
+    password = request.config.getoption("--password")  # only for remote start
 
     log_level = request.config.getoption("--log_level")
     logger = logging.getLogger(request.node.name)
@@ -54,31 +46,32 @@ def browser(request):
             options = webdriver.FirefoxOptions()
             if headless:
                 options.add_argument('--headless=new')
-            service = FirefoxService(executable_path=os.path.join(drivers_folder, "chromedriver"))
-            driver = webdriver.Firefox(service=service, options=options)
+            driver = webdriver.Firefox(options=options)
 
         elif browser == "edge":
             options = webdriver.EdgeOptions()
             if headless:
                 options.add_argument('--headless=new')
-            service = EdgeService(executable_path=os.path.join(drivers_folder, "msedgedriver"))
-            driver = webdriver.Edge(service=service, options=options)
+            driver = webdriver.Edge(options=options)
 
         elif browser == "opera":
             options = webdriver.ChromeOptions()
             if headless:
                 options.add_argument('--headless=new')
-            service = ChromeService(executable_path=os.path.join(drivers_folder, "operadriver"))
-            driver = webdriver.Chrome(service=service, options=options)
+            driver = webdriver.Chrome(options=options)
 
     else:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(f'{executor}', username=f'{user}', password=f'{password}')
+
         capabilities = {
             "browserName": browser,
             "acceptInsecureCerts": True,
             "selenoid:options": {
                 "enableVNC": True,
-                "enableVideo": True
-            },
+                "enableVideo": False
+            }
         }
         options = Options()
         for k, v in capabilities.items():
@@ -96,4 +89,24 @@ def browser(request):
     driver.get(f"http://{executor}")
     yield driver
     driver.quit
+    if remote:
+        ssh.close()
     logger.info("===> Test %s finished at %s" % (request.node.name, datetime.datetime.now()))
+
+
+@pytest.fixture
+def base_url(request):
+    remote = request.config.getoption("--remote")
+    executor = request.config.getoption("--executor")
+    if remote:
+        url = f"http://{executor}"
+    else:
+        url = "http://localhost"
+    return url
+
+# второй вариант вместо фикстуры base_url: в фикстуре browser прописать yield driver, base_url - Передача нескольких
+# переменных через yield (browser = tuple(кортеж)), потом в каждом тесте из фикстуры нужно будет получать неск. значений
+# (def test4_admin_page(browser):
+# browser, base_url = browser
+# browser.get(f"{base_url}/admin"))
+# но тогда тоже получится избыточный код, потому что не в каждом тесте нужен base_url
