@@ -1,4 +1,5 @@
 import random
+import allure
 from pages_and_components.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
@@ -13,10 +14,12 @@ class CurrencyComponent(BasePage):
         self.GBP_IN_DROPDOWN = (By.XPATH, '//*[@name="GBP"]')
         self.USD_IN_DROPDOWN = (By.XPATH, '//*[@name="USD"]')
 
+    @allure.step("Click CURRENCY_DROPDOWN")
     def open_currency_dropdown(self):
         el = self.get_element_by_locator(self.CURRENCY_DROPDOWN)
         el.click()
 
+    @allure.step("Check currency in dropdown")
     def is_currency_in_dropdown(self, currency):
         try:
             self.get_element_by_locator(By.XPATH, f'//*[@name="{currency}"]')
@@ -24,6 +27,7 @@ class CurrencyComponent(BasePage):
         except TimeoutException:
             return False
 
+    @allure.step("Change rendom currency")
     def change_random_currency(self):
         list_cur = [self.EUR_IN_DROPDOWN, self.GBP_IN_DROPDOWN, self.USD_IN_DROPDOWN]
         cur_random = random.choice(list_cur)
