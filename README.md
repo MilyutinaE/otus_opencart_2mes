@@ -45,3 +45,11 @@ pytest  --executor="192.168.0.105" --log_level=INFO  --remote=True --user="X" --
 после прогона тестов можно также открыть аллюр репорт
 D:\programsfortests\allure\allure-2.24.1\bin\allure.bat generate allure-results\ --clean
 потом в аллюр-репорт открыть индекс.хтмл и открыть в хроме
+
+
+how to work with dockerfile (on my VMware):
+1. open linux terminal
+2. build dockerfile
+docker build -t tests .
+3. run
+docker run --rm tests --executor="192.168.244.128"  --remote=true --user="X" --password="X"
