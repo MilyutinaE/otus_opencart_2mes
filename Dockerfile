@@ -7,5 +7,4 @@ COPY . /app
 RUN pip install -U pip
 RUN pip install -r requirements.txt
 ENTRYPOINT ["pytest"]
-# Создать директорию allure-results внутри контейнера
-RUN mkdir /allure-results
+
